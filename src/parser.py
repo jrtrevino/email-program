@@ -65,22 +65,16 @@ def format_email(data):
     return email_txt
 
 
-def setup_logging(file_path):
-    # grab filename from path
-    filename = file_path.split('/')[-1].split('.csv')[0]
-    if not os.path.isdir('../logs'):
-        os.mkdir('../logs')
-    logging.basicConfig(filename=f'../logs/{filename}.log', level=logging.INFO)
-    logging.info('BEGIN LOGGING')
 
-
-def main():
-    file_path = '../data/test3.csv'
-    setup_logging(file_path)
+def begin(file_path):
+    email_message = None
     data = read_csv(file_path)
     if data:
-        format_email(data)
+        email_message = format_email(data)
+        logging.info('END LOGGING')
+    return email_message
+
 
 
 if __name__ == "__main__":
-    main()
+    begin('../data/test3.csv')
