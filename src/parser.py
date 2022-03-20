@@ -1,5 +1,6 @@
 import pandas as pd
-
+import logging
+import os
 
 def read_csv(path):
     data_store = None
@@ -36,8 +37,8 @@ def read_csv(path):
             str(dataframe['Date'].iloc[0]), str(dataframe['Date'].iloc[-1])]
 
     except Exception as e:
-        print("Error parsing CSV.")
-        print(e)
+        logging.error('Could not parse CSV')
+        logging.error(e)
 
     return data_store
 
@@ -59,11 +60,24 @@ def format_email(data):
     Your take home profit: ${data['Profit']:.{2}f}
     """
 
-    print(email_txt)
+    logging.info(data)
+    logging.info(email_txt)
     return email_txt
 
+
+def setup_logging(file_path):
+    # grab filename from path
+    filename = file_path.split('/')[-1].split('.csv')[0]
+    if not os.path.isdir('../logs'):
+        os.mkdir('../logs')
+    logging.basicConfig(filename=f'../logs/{filename}.log', level=logging.INFO)
+    logging.info('BEGIN LOGGING')
+
+
 def main():
-    data = read_csv('../data/test3.csv')
+    file_path = '../data/test3.csv'
+    setup_logging(file_path)
+    data = read_csv(file_path)
     if data:
         format_email(data)
 
