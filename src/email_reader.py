@@ -79,7 +79,6 @@ def send_email(message, sender):
 def main():
     load_env()
     files_to_parse = connect_gmail()
-    print(files_to_parse)
     for obj in files_to_parse:
         setup_logging(obj['file'])
         # generate email text
