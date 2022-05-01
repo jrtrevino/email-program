@@ -79,10 +79,17 @@ def send_email(message, sender):
 def main():
     load_env()
     files_to_parse = connect_gmail()
+    processed_files = []
     for obj in files_to_parse:
+        # dont parse duplicate email attachments
+        if obj['file'] in processed_files:
+            continue
+        processed_files.append(obj['file'])
         setup_logging(obj['file'])
         # generate email text
         msg = begin(obj['file'])
+        if not msg:
+            msg = "We had trouble parsing your file. Please contact Joey."
         send_email(msg, obj['sender'][0])
 
 
